@@ -8,6 +8,8 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
+import { Button } from 'react-native';
+import InstaCaptureModule from './Dependinces/InstaCaptureModule';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -24,6 +26,15 @@ export default class App extends Component<Props> {
         <Text style={styles.welcome}>Welcome to React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
+          <Button
+          onPress={() => {
+           InstaCaptureModule.capturescreen();
+          }}
+          title="Learn More"
+          color="#841584"
+          accessibilityLabel="Learn more about this purple button"
+          />
+
       </View>
     );
   }
