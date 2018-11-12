@@ -53,7 +53,10 @@ public class InstaCaptureModule extends ReactContextBaseJavaModule{
         Instacapture.capture(getCurrentActivity(), new SimpleScreenCapturingListener() {
             @Override
             public void onCaptureComplete(Bitmap bitmap) {
-                String filename = "tt.png";
+                
+                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH-mm", Locale.getDefault());
+                String fileName = "InstaCapture-" + dateFormat.format(new Date()) + ".png";
+              
                 File sd = new File(Environment.getExternalStorageDirectory()
                 + "/Pictures/InstaBug/"
                 ); 
@@ -63,9 +66,9 @@ public class InstaCaptureModule extends ReactContextBaseJavaModule{
                     Log.v("ReactNative", e.toString());
                 }
                
-                File dest = new File(sd, filename);
+                File dest = new File(sd, fileName);
                 Log.v("ReactNative", dest.getAbsolutePath());
-                //Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+             
                 try {
                      FileOutputStream out = new FileOutputStream(dest);
                      bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
@@ -74,52 +77,12 @@ public class InstaCaptureModule extends ReactContextBaseJavaModule{
                 } catch (Exception e) {
                     Log.v("ReactNative", e.toString());
                 }
-                //saveBitmapToFile(getReactApplicationContext(),bitmap).getAbsolutePath();
+           
             }
         });
     }
 
-    private static File getScreenshotFile(@NonNull final Context applicationContext) {
-
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss.SS", Locale.getDefault());
-
-        String fileName = "screenshot-" + dateFormat.format(new Date()) + ".jpg";
-
-        final File screenshotsDir =
-                new File(applicationContext.getDir("imageDir", Context.MODE_PRIVATE), "Instabug");
-        screenshotsDir.mkdirs();
-        return new File(screenshotsDir, fileName);
-    }
-
-
-    public static File saveBitmapToFile(@NonNull final Context context,
-    @NonNull final Bitmap bitmap) {
-
-        OutputStream outputStream = null;
-        File screenshotFile = getScreenshotFile(context);
-
-        try {
-            outputStream = new BufferedOutputStream(new FileOutputStream(screenshotFile));
-
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream);
-
-            outputStream.flush();
-            Log.v("ReactNative", "e.getMessage()");
-            Log.v("ReactNative","Screenshot saved to " + screenshotFile.getAbsolutePath());
-        } catch (final IOException e) {
-            Log.v("ReactNative", e.getMessage());
-            
-        } finally {
-            if (outputStream != null) {
-                try {
-                    outputStream.close();
-                } catch (final IOException ignored) {
-                    Log.v("ReactNative","Failed to close OutputStream.");
-                }
-            }
-        }
-    return screenshotFile;
-    }
+   
 
     
 }

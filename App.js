@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View,PermissionsAndroid } from 'react-native';
 import { Button } from 'react-native';
 import InstaCaptureModule from './Dependinces/InstaCaptureModule';
 
@@ -18,21 +18,47 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
+async function requestCameraPermission() {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        'title': 'Instacapture App Storage Permission',
+        'message': 'Instacapture App needs access to your Storage ' +
+                   'so it can Save ScreenShots.'
+      }
+    )
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log("You can use the camera")
+    } else {
+      console.log("Camera permission denied")
+    }
+  } catch (err) {
+    console.warn(err)
+  }
+}
+
+
+
 type Props = {};
 export default class App extends Component<Props> {
+  async componentWillMount() {
+    await requestCameraPermission()
+    }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <Text style={styles.welcome}>Press The Button To Take ScreenShot!</Text>
+        <Text style={styles.instructions}>The Image Is Saved in The External Memory</Text>
+        <Text style={styles.instructions}>in Pictures/InstaBug</Text>
           <Button
           onPress={() => {
            InstaCaptureModule.capturescreen();
           }}
-          title="Learn More"
+          title="Take ScreenShot"
           color="#841584"
-          accessibilityLabel="Learn more about this purple button"
+        
           />
 
       </View>
